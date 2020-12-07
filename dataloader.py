@@ -6,12 +6,13 @@ from torchvision import datasets, transforms
 class Dataset(data.Dataset):
     def __init__(self, name):
         if name == "ImageNet":
+            transform = transforms.Compose([
+                                            transforms.ToTensor(),
+                                            transforms.Normalize(mean=(0.5,), std=(0.5,))
+                                            ])
             self.dataset = datasets.ImageNet(root="ImageNet/",
                                              download=True,
-                                             transform=transforms.Compose([
-                                                 transforms.ToTensor(),
-                                                 transforms.Normalize(mean=(0.5,), std=(0.5,))
-                                             ]))
+                                             transform=transform)
     
     def __getitem__(self, index):
         return self.dataset[index]
