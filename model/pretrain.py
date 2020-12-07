@@ -63,6 +63,6 @@ class Pretrain(nn.Module):
 
 if __name__ == "__main__":
     model = Pretrain()
-    test_input = torch.zeros([1, 3, 448, 448])
+    test_input = torch.zeros([2, 3, 448, 448])
     test_output = model(test_input)
     print(test_output.shape)
