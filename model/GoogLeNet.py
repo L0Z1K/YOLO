@@ -63,7 +63,7 @@ class forpt(nn.Module): # for pretraining, appednd average pooling and linear mo
     def __init__(self):
         super().__init__()
         self.avgpool2d = nn.AvgPool2d(14)
-        self.linear = nn.Linear(1024, 1)
+        self.linear = nn.Linear(1024, 1000)
     
     def forward(self, x):
         out = self.avgpool2d(x)
