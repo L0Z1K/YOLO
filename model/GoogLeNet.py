@@ -1,7 +1,6 @@
-from torch import nn
+import torch.nn as nn
 import torch
 import numpy as np
-
 
 class ConvBlock(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size, stride, padding):
@@ -15,7 +14,7 @@ class ConvBlock(nn.Module):
     def forward(self, x):
         return self.model(x)
 
-class Pretrain(nn.Module):
+class GoogLeNet(nn.Module):
     def __init__(self):
         super().__init__()
         self.layers = nn.ModuleList([               # output = (input-kernel+2*pad)/stride + 1
@@ -60,9 +59,24 @@ class Pretrain(nn.Module):
                 x = layer(x)
         return x
 
+class forpt(nn.Module): # for pretraining, appednd average pooling and linear model. I didn't come up with this model's name.
+    def __init__(self):
+        super().__init__()
+        self.avgpool2d = nn.AvgPool2d(14)
+        self.linear = nn.Linear(1024, 1)
+    
+    def forward(self, x):
+        out = self.avgpool2d(x)
+        out = out.view(out.size(0), -1)
+        out = self.linear(out)
+        return out
 
 if __name__ == "__main__":
-    model = Pretrain()
+    model = GoogLeNet()
     test_input = torch.zeros([1, 3, 448, 448])
     test_output = model(test_input)
+    print(test_output.shape)
+    
+    submodel = forpt()
+    test_output = submodel(test_output)
     print(test_output.shape)
