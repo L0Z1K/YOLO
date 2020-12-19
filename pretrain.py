@@ -3,7 +3,7 @@ import torch.nn as nn
 from dataloader import ImageNet, DataLoader
 from model.GoogLeNet import GoogLeNet, forpt
 
-debug = True
+debug = False
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 if not debug:
@@ -23,10 +23,16 @@ opt_submodel = torch.optim.SGD(submodel.parameters(), lr=0.0001)
 
 cnt = len(train_loader)
 total_epochs = 100 if not debug else 1
+
+print("Train Start!")
 for epoch in range(1, total_epochs+1):
     avg_cost = 0
     for x, y in train_loader:
-        y_pred = submodel(model(x))
+        x = x.to(device)
+        y = y.to(device)
+
+        y_pred = model(x)
+        y_pred = submodel(y_pred)
         
         cost = loss(y_pred, y)
         opt_model.zero_grad()
