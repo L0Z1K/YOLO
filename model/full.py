@@ -25,11 +25,17 @@ class YOLO(nn.Module):
         x = self.linear1(x)
         x = self.linear2(x)
         x = torch.reshape(x, (-1, 7, 7, 30))
-        p_class = x[:, -self.n_class:]
-        print(p_class.shape)
-        for i in n_box:
-            
-        return x    
+
+        print(x.shape)
+
+        arr = [5 for _ in range(self.n_box)] + [self.n_class]
+        res = torch.split(x, arr, dim = -1)
+
+        print(res[0].shape)
+        print(res[1].shape)
+        print(res[2].shape)
+
+        return x
 
 if __name__ == "__main__":
     model = YOLO(n_box = 2, n_class = 20)
