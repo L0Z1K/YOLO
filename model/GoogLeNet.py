@@ -62,21 +62,23 @@ class GoogLeNet(nn.Module):
 class forpt(nn.Module): # for pretraining, appednd average pooling and linear model. I didn't come up with this model's name.
     def __init__(self):
         super().__init__()
+        self.googleNet = GoogLeNet()
         self.avgpool2d = nn.AvgPool2d(14)
         self.linear = nn.Linear(1024, 1000)
     
     def forward(self, x):
-        out = self.avgpool2d(x)
+        out = self.googleNet(x)
+        out = self.avgpool2d(out)
         out = out.view(out.size(0), -1)
         out = self.linear(out)
         return out
 
 if __name__ == "__main__":
-    model = GoogLeNet()
+    model = forpt()
     test_input = torch.zeros([1, 3, 448, 448])
     test_output = model(test_input)
     print(test_output.shape)
     
-    submodel = forpt()
-    test_output = submodel(test_output)
-    print(test_output.shape)
+    # submodel = forpt()
+    # test_output = submodel(test_output)
+    # print(test_output.shape)
