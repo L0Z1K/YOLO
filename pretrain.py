@@ -4,7 +4,7 @@ from dataloader import ImageNet, DataLoader
 from model.GoogLeNet import forpt
 import time
 
-debug = True
+debug = False
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 if not debug:
     assert device == 'cuda'
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     cnt = len(train_loader)
     total_epochs = 100 if not debug else 1
 
-    print("Train Start!")
+    print(f'Train Start! on {device}{"with debug on" if debug else ""}')
     start = time.time()
     for epoch in range(1, total_epochs+1):
         avg_cost = 0
@@ -36,7 +36,7 @@ if __name__ == "__main__":
             cost = loss(y_pred, y)
             opt_pretrain_model.zero_grad()
             cost.backward()
-            pretrain_model.step()
+            opt_pretrain_model.step()
             
             avg_cost += cost
         avg_cost /= cnt
